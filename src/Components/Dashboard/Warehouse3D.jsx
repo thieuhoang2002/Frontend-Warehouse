@@ -1,26 +1,7 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Text, OrbitControls } from '@react-three/drei';
-
-
 import ShelfModel from '../Model3D/ShelfModel';
-// function Shelf({ position, color, label }) {
-//     return (
-//         <mesh position={position}>
-//             <planeGeometry args={[2, 1]} />
-//             <meshStandardMaterial color={color} />
-//             <Text position={[0, 0, 0.1]} fontSize={0.3} color="white">
-//                 {label}
-//             </Text>
-//         </mesh>
-//     );
-// }
-
-// const Compartment = ({ position, color, nameComp }) => {
-//   return (
-//     <mesh position={position}>
-//       <boxGeometry args={[0.4, 0.35, 0.4]} />
-//       <meshStandardMaterial color={color} roughness={0.6} metalness={0.1} />
 
 function Warehouse3D() {
   const rows = 4; // Số hàng
@@ -36,12 +17,12 @@ function Warehouse3D() {
     >
       <ambientLight intensity={0.2} />
       <pointLight position={[10, 10, 10]} intensity={0.8} />
-      <Grid />
+      <gridHelper args={[50, 50, '#444', '#222']} />
 
       {/* Vẽ nhiều kệ với đúng trục X, Y, Z */}
       {Array.from({ length: rows }).map((_, rowIndex) =>
         Array.from({ length: columns }).map((_, columnIndex) => (
-          <Shelf
+          <ShelfModel
             key={`${rowIndex}-${columnIndex}`}
             position={[
               columnIndex * shelfSpacingX - (columns * shelfSpacingX) / 2.2, // Lùi về hướng X âm
