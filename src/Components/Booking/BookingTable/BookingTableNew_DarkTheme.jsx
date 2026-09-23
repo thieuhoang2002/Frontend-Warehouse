@@ -38,18 +38,37 @@ const BookingTableNew = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const downloadClicked = (rowIndex) => {
+  const downloadClicked = async (rowIndex) => {
+    const excelFile = bookings[rowIndex].excelFile.split("\\").pop();
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    const token = user?.accessToken ? `Bearer ${user.accessToken}` : "";
+
     Swal.fire({
       title: "Đang tải xuống...",
-      timer: 1000,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    }).then(() => {
-      const excelFile = bookings[rowIndex].excelFile.split("\\").pop();
-      // window.open(`http://localhost:8080/api/booking/download/${excelFile}`);
-      window.open(`${API_URL}/api/booking/download/${excelFile}`);
+      allowOutsideClick: false,
+      didOpen: () => { Swal.showLoading(); },
     });
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/booking/download/${excelFile}`,
+        { headers: { Authorization: token } }
+      );
+      if (!response.ok) throw new Error("Download failed");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = excelFile;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      Swal.close();
+    } catch (error) {
+      Swal.fire({ icon: "error", title: "Lỗi", text: "Không thể tải file. Vui lòng thử lại." });
+      console.error("Download error:", error);
+    }
   };
 
   const handleEditClick = (rowIndex) => {

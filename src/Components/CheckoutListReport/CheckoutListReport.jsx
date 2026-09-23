@@ -68,13 +68,15 @@ const CheckoutListReport = () => {
     });
 
     try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const token = user?.accessToken ? `Bearer ${user.accessToken}` : "";
       const response = await fetch(
-        // "http://localhost:8080/api/jasper/generate-pdf-checkout-item",
         `${API_URL}/api/jasper/generate-pdf-checkout-item`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: token,
           },
           body: JSON.stringify(group),
         }
