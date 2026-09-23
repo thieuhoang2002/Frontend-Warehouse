@@ -74,7 +74,6 @@ const Warehouse = () => {
       });
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     apiClient.get("/api/compartments")
       .then((r) => {
@@ -85,6 +84,7 @@ const Warehouse = () => {
         }
       })
       .catch((error) => console.error("Error fetching compartments:", error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getCompartmentColor = (compartments, shelfId, nameComp) => {

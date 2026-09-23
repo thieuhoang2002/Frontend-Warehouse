@@ -28,9 +28,9 @@ const DeliveryReport = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("info");
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchPendingCheckoutItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchPendingCheckoutItems = () => {

@@ -50,9 +50,9 @@ export default function ProductTable({
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     allProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -67,7 +67,8 @@ export default function ProductTable({
           console.error("Error fetching products:", error);
         });
     }
-  }, [productsByName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productsByName, allProduct]);
 
   if (loading) {
     return <p>Loading...</p>;

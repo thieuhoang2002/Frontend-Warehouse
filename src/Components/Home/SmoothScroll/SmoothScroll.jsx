@@ -18,7 +18,6 @@ const SmoothScroll = ({ children }) => {
   //     setBodyHeight();
   //   }, ["360vh"]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (window.location.href === "http://localhost:3000/") {
       setBodyHeight();
@@ -28,6 +27,7 @@ const SmoothScroll = ({ children }) => {
     return () => {
       document.body.style.height = "auto"; // Xóa style khi component unmount
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [windowSize.height]);
 
   const setBodyHeight = () => {
@@ -46,11 +46,11 @@ const SmoothScroll = ({ children }) => {
     requestAnimationFrame(() => smoothScrollingHandler());
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (window.location.href === "http://localhost:3000/") {
       requestAnimationFrame(() => smoothScrollingHandler());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

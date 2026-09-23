@@ -31,9 +31,9 @@ const CheckoutListReport = () => {
   const [endDate, setEndDate] = useState(today);
   const [selectedRange, setSelectedRange] = useState("today");
   const API_URL = process.env.REACT_APP_API_URL;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchPendingCheckoutItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchPendingCheckoutItems = () => {
