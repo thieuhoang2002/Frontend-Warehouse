@@ -131,22 +131,30 @@ src/
 npm run build
 ```
 
+> Build script dùng `cross-env CI=false GENERATE_SOURCEMAP=false` để tránh lỗi ESLint khi deploy trên CI/CD.
+
 Output tại thư mục `build/`. Deploy lên Vercel, Netlify, hoặc bất kỳ static host nào.
 
 ### Deploy lên Vercel
 
+1. Push code lên GitHub
+2. Kết nối repo tại [vercel.com](https://vercel.com) → **New Project**
+3. Framework Preset: **Create React App**
+4. **Không cần** set `REACT_APP_API_URL` trên Vercel Dashboard — file `.env.production` trong repo đã chứa URL backend Render
+
 ```bash
-npm install -g vercel
-vercel --prod
+# .env.production (đã commit vào repo, không chứa secret)
+REACT_APP_API_URL=https://wms-backend-iu98.onrender.com
+GENERATE_SOURCEMAP=false
 ```
 
-Cấu hình environment variable `REACT_APP_API_URL` trên Vercel dashboard trỏ về backend Render.
+> ⚠️ Nếu đổi backend URL, chỉnh `.env.production` rồi push lại — Vercel tự re-deploy.
+
+
 
 ---
 
 ## 📚 Tài Liệu Liên Quan
-
-| File | Nội dung |
 |------|----------|
 | [TECHSTACK.md](TECHSTACK.md) | Danh sách thư viện và lý do chọn |
 | [../Backend-Warehouse/README.md](../Backend-Warehouse/README.md) | Backend Spring Boot |
