@@ -1,13 +1,11 @@
-import axios from "axios";
+import apiClient from "./api-client";
 
-// const API_URL = "http://localhost:8080/api/shelf";
-const API_URL = `${process.env.REACT_APP_API_URL}/api/shelf`;
+const API_PATH = "/api/shelf";
 
-const getAllShelves = () => {
-  return axios.get(API_URL).then((response) => {
-    return response.data;
-  });
-};
+const getAllShelves = () =>
+  apiClient.get(API_PATH)
+    .then((r) => r.data)
+    .catch(() => []);
 
 const ShelfService = {
   getAllShelves,

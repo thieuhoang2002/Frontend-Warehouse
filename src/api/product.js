@@ -1,153 +1,46 @@
-import axios from "axios";
+import apiClient from "./api-client";
 
-// const API_URL = "http://localhost:8080/api/product/";
-const API_URL = `${process.env.REACT_APP_API_URL}/api/product/`;
+const API_PATH = "/api/product/";
 
-const getAllProducts = () => {
-  return axios
-    .get(API_URL + "all")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getAllProducts = () =>
+  apiClient.get(API_PATH + "all")
+    .then((r) => r.data)
+    .catch(() => []);
 
-const getListProducts = () => {
-  return axios
-    .get(API_URL + "get-list-products")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getListProducts = () =>
+  apiClient.get(API_PATH + "get-list-products")
+    .then((r) => r.data)
+    .catch(() => []);
 
-const getProductsIsNullCompartment = () => {
-  return axios
-    .get(API_URL + "items-not-in-compartments")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getProductsIsNullCompartment = () =>
+  apiClient.get(API_PATH + "items-not-in-compartments")
+    .then((r) => r.data)
+    .catch(() => []);
 
-const getProductsByCheckinDecrease = () => {
-  return axios
-    .get(API_URL + "items-check-in-decrease")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getProductsByCheckinDecrease = () =>
+  apiClient.get(API_PATH + "items-check-in-decrease")
+    .then((r) => r.data)
+    .catch(() => []);
 
-const getProductsByCheckinIncrease = () => {
-  return axios
-    .get(API_URL + "items-check-in-increase")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getProductsByCheckinIncrease = () =>
+  apiClient.get(API_PATH + "items-check-in-increase")
+    .then((r) => r.data)
+    .catch(() => []);
 
-const getProductsByCheckoutIncrease = () => {
-  return axios
-    .get(API_URL + "items-check-out-increase")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getProductsByCheckoutIncrease = () =>
+  apiClient.get(API_PATH + "items-check-out-increase")
+    .then((r) => r.data)
+    .catch(() => []);
 
-const getProductsByCheckoutDecrease = () => {
-  return axios
-    .get(API_URL + "items-check-out-decrease")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getProductsByCheckoutDecrease = () =>
+  apiClient.get(API_PATH + "items-check-out-decrease")
+    .then((r) => r.data)
+    .catch(() => []);
 
-const searchItem = (data) => {
-  return axios
-    .get(`${API_URL}search`, {
-      params: { data }, // Gửi tham số data qua query params
-    })
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi tìm kiếm:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const searchItem = (data) =>
+  apiClient.get(API_PATH + "search", { params: { data } })
+    .then((r) => r.data)
+    .catch(() => []);
 
 const updateProduct = (product) => {
   const formData = new FormData();
@@ -159,65 +52,24 @@ const updateProduct = (product) => {
   formData.append("delivery", product.delivery);
   formData.append("weight", product.weight);
 
-  return axios
-    .put(API_URL + `update/${product.itemId}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+  return apiClient
+    .put(API_PATH + `update/${product.itemId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
-    .then((response) => {
-      console.log(response.data);
-      return response.data.message;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi cập nhật:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
+    .then((r) => r.data.message)
+    .catch((err) => err.response?.data?.message || "Cập nhật thất bại");
 };
 
-const getTotalItemsInStock = () => {
-  return axios
-    .get(API_URL + "totalItemsInStock")
-    .then((response) => {
-      console.log("Tổng số lượng item đang lưu kho:", response.data);
-      return response.data; // Trả về tổng số lượng item
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy tổng số lượng item:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getTotalItemsInStock = () =>
+  apiClient.get(API_PATH + "totalItemsInStock")
+    .then((r) => r.data)
+    .catch(() => 0);
 
-const getMonthlyItemCount = () => {
-  return axios
-    .get(API_URL + "monthlyItemCount")
-    .then((response) => {
-      console.log("Thống kê số lượng hàng nhập theo tháng:", response.data);
-      return response.data; // Trả về dữ liệu thống kê theo tháng (gồm tháng và tổng số lượng)
-    })
-    .catch((error) => {
-      console.error(
-        "Có lỗi xảy ra khi lấy dữ liệu thống kê theo tháng:",
-        error
-      );
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getMonthlyItemCount = () =>
+  apiClient.get(API_PATH + "monthlyItemCount")
+    .then((r) => Array.isArray(r.data) ? r.data : [])
+    .catch(() => []);
+
 const ProductService = {
   getAllProducts,
   updateProduct,

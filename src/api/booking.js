@@ -1,98 +1,42 @@
-import axios from "axios";
+import apiClient from "./api-client";
 
-// const API_URL = "http://localhost:8080/api/booking/";
-const API_URL = `${process.env.REACT_APP_API_URL}/api/booking/`;
+const API_PATH = "/api/booking/";
 
-// Upload booking
 const upload = (file) => {
   const formData = new FormData();
   formData.append("file", file);
-
-  return axios
-    .post(API_URL + "upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+  return apiClient
+    .post(API_PATH + "upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
-    .then((response) => {
-      console.log(response.data);
-      return response.data.message;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
+    .then((r) => r.data.message)
+    .catch((err) => err.response?.data?.message || "Upload thất bại");
 };
 
-const getAllBookings = () => {
-  return axios
-    .get(API_URL + "all")
-    .then((response) => {
-      console.log(response.data);
-      return response.data;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getAllBookings = () =>
+  apiClient.get(API_PATH + "all")
+    .then((r) => r.data)
+    .catch(() => []);
 
-// Update booking
 const updateBooking = (booking) => {
   const formData = new FormData();
   formData.append("email", booking.customerEmail);
   formData.append("phoneNumber", booking.numberphone);
   formData.append("fullName", booking.customerName);
   formData.append("filePath", booking.excelFile);
-
-  return axios
-    .put(API_URL + `update/${booking.id}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+  return apiClient
+    .put(API_PATH + `update/${booking.id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     })
-    .then((response) => {
-      console.log(response.data);
-      return response.data.message;
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi cập nhật:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
+    .then((r) => r.data.message)
+    .catch((err) => err.response?.data?.message || "Cập nhật thất bại");
 };
 
-const getTotalCustomers = () => {
-  return axios
-    .get(API_URL + "totalCustomers")
-    .then((response) => {
-      console.log("Tổng số lượng khách hàng:", response.data);
-      return response.data; // Trả về tổng số lượng khách hàng
-    })
-    .catch((error) => {
-      console.error("Có lỗi xảy ra khi lấy tổng số lượng khách hàng:", error);
-      if (error.response) {
-        console.log(error.response.data.message);
-        return error.response.data.message;
-      } else {
-        return "Có lỗi không xác định xảy ra.";
-      }
-    });
-};
+const getTotalCustomers = () =>
+  apiClient.get(API_PATH + "totalCustomers")
+    .then((r) => r.data)
+    .catch(() => 0);
+
 const BookingService = {
   upload,
   getAllBookings,

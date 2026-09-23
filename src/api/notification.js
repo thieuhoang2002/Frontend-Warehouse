@@ -1,30 +1,27 @@
-import axios from "axios";
+import apiClient from "./api-client";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 
-// const API_URL = "http://localhost:8080/api/notifications";
-const API_URL = `${process.env.REACT_APP_API_URL}/api/notifications`;
+const API_PATH = "/api/notifications";
+const WS_URL  = `${process.env.REACT_APP_API_URL}/ws`;
 
-// Lấy danh sách thông báo
-const getNotifications = () => {
-  return axios.get(API_URL).then((response) => response.data);
-};
+const getNotifications = () =>
+  apiClient.get(API_PATH)
+    .then((r) => r.data)
+    .catch(() => []);
 
-// Đánh dấu thông báo là đã đọc
-const markAsRead = (id) => {
-  return axios
-    .put(`${API_URL}/${id}/mark-as-read`)
-    .then((response) => response.data);
-};
+const markAsRead = (id) =>
+  apiClient.put(`${API_PATH}/${id}/mark-as-read`)
+    .then((r) => r.data)
+    .catch(() => null);
 
-// Xóa thông báo
-const deleteNotification = (id) => {
-  return axios.delete(`${API_URL}/${id}`).then((response) => response.data);
-};
+const deleteNotification = (id) =>
+  apiClient.delete(`${API_PATH}/${id}`)
+    .then((r) => r.data)
+    .catch(() => null);
 
-// Đăng ký WebSocket cho thông báo
 const connectWebSocket = (onMessageReceived) => {
-  const socket = new SockJS(`${API_URL}/ws`);
+  const socket = new SockJS(WS_URL);
   const stompClient = Stomp.over(socket);
 
   stompClient.connect(
@@ -32,22 +29,18 @@ const connectWebSocket = (onMessageReceived) => {
     () => {
       console.log("Connected to WebSocket");
       stompClient.subscribe("/topic/notifications", (message) => {
-        console.log("Received message:", message.body);
         const notification = JSON.parse(message.body);
         onMessageReceived(notification);
       });
     },
     (error) => {
-      console.error("Error connecting to WebSocket:", error);
+      console.error("WebSocket error:", error);
     }
   );
 
-  return () => {
-    stompClient.disconnect();
-  };
+  return () => stompClient.disconnect();
 };
 
-// Xuất các hàm trong NotificationService
 const NotificationService = {
   getNotifications,
   markAsRead,
