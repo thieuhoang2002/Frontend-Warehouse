@@ -5,6 +5,7 @@ import BookingService from "../../../api/booking";
 import "./BtnAddNewBooking.css";
 import Swal from "sweetalert2";
 import CloseIcon from "@mui/icons-material/Close";
+import Papa from "papaparse";
 
 const BtnAddNewBooking = ({ onClose }) => {
   const [fileName, setFileName] = useState("");
@@ -51,7 +52,7 @@ const BtnAddNewBooking = ({ onClose }) => {
             setFile(uploadedFile);
             setFileName(uploadedFile.name);
           } else {
-            AlertFail("Vui lòng chỉ chọn tệp CSV.");
+            AlertFail("Tập tin sai định dạng. Hãy chọn file .csv!");
           }
         }}
         accept=".csv"

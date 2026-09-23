@@ -20,10 +20,9 @@ const Warehouse = () => {
   const API_URL = process.env.REACT_APP_API_URL;
 
   const fetchCompartmentFromServer = (compartmentIdentifier) => {
-    // return (
-    //   fetch(
-    //     `http://localhost:8080/api/compartments/${compartmentIdentifier.shelfId}/${compartmentIdentifier.nameComp}`
-    //   )
+    // return fetch(
+    //   `http://localhost:8080/api/compartments/${compartmentIdentifier.shelfId}/${compartmentIdentifier.nameComp}`
+    // )
     return fetch(
       `${API_URL}/api/compartments/${compartmentIdentifier.shelfId}/${compartmentIdentifier.nameComp}`
     )
@@ -41,7 +40,7 @@ const Warehouse = () => {
 
   const createCompartment = (compartmentData) => {
     // return fetch(
-    //   `http://localhost:8080/api/compartments/${compartmentData.shelfId}`,{
+    //  `http://localhost:8080/api/compartments/${compartmentData.shelfId}`, {
     return fetch(`${API_URL}/api/compartments/${compartmentData.shelfId}`, {
       method: "POST",
       headers: {
@@ -103,7 +102,7 @@ const Warehouse = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    //fetch("http://localhost:8080/api/compartments")
+    // fetch("http://localhost:8080/api/compartments")
     fetch(`${API_URL}/api/compartments`)
       .then((response) => response.json())
       .then((data) => {
@@ -203,10 +202,10 @@ const Warehouse = () => {
                   position={[
                     shelf.position.xCoord,
                     shelf.position.yCoord +
-                      baseHeightOffset +
-                      layerHeights
-                        .slice(0, layerIndex)
-                        .reduce((acc, val) => acc + val, 0),
+                    baseHeightOffset +
+                    layerHeights
+                      .slice(0, layerIndex)
+                      .reduce((acc, val) => acc + val, 0),
                     shelf.position.zCoord,
                   ]}
                 >
@@ -265,9 +264,9 @@ const Warehouse = () => {
               ))}
             </group>
           ))}
-        <TruckModel position={[5, 1, 11]} scale={[0.5, 0.5, 0.5]} />
-        <TruckModel position={[8, 1, 11]} scale={[0.5, 0.5, 0.5]} />
-        <AssetsModel position={[-6, 0.1, 8]} scale={[0.5, 0.5, 0.5]} />
+        <TruckModel position={[4, 1, 9]} scale={[0.5, 0.5, 0.5]} />
+        <TruckModel position={[7, 1, 9]} scale={[0.5, 0.5, 0.5]} />
+        <AssetsModel position={[-4, 0.1, 6]} scale={[0.5, 0.5, 0.5]} />
       </Canvas>
       {popupVisible && selectedCompartment && (
         <PopupItems

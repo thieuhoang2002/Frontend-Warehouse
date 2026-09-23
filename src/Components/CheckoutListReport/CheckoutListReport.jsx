@@ -37,7 +37,7 @@ const CheckoutListReport = () => {
   }, []);
 
   const fetchPendingCheckoutItems = () => {
-    //fetch("http://localhost:8080/api/jasper/checkout-records/grouped")
+    // fetch("http://localhost:8080/api/jasper/checkout-records/grouped")
     fetch(`${API_URL}/api/jasper/checkout-records/grouped`)
       .then((response) => {
         if (!response.ok) {
@@ -70,7 +70,7 @@ const CheckoutListReport = () => {
 
     try {
       const response = await fetch(
-        //"http://localhost:8080/api/jasper/generate-pdf-checkout-item",
+        // "http://localhost:8080/api/jasper/generate-pdf-checkout-item",
         `${API_URL}/api/jasper/generate-pdf-checkout-item`,
         {
           method: "POST",
