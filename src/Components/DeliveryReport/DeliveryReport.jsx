@@ -22,6 +22,7 @@ import CompartmentService from "./../../api/compartment";
 import Swal from "sweetalert2";
 
 const DeliveryReport = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [checkoutGroups, setCheckoutGroups] = useState([]);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("info");
@@ -98,13 +99,15 @@ const DeliveryReport = () => {
     });
 
     try {
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const token = user?.accessToken ? `Bearer ${user.accessToken}` : "";
       const response = await fetch(
-        "http://localhost:8080/api/jasper/generate-pdf-delivery-report",
-        // `${API_URL}/api/jasper/generate-pdf-delivery-report`,
+        `${API_URL}/api/jasper/generate-pdf-delivery-report`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: token,
           },
           body: JSON.stringify(group),
         }
