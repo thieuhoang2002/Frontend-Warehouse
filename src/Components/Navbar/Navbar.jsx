@@ -120,6 +120,11 @@ const Navbar = () => {
           <li className={location.pathname === "/warehouse" ? "active" : ""}>
             <Link to="/warehouse">Kho hàng</Link>
           </li>
+          {currentUser?.roles?.includes("ROLE_ADMIN") || currentUser?.role === "ROLE_ADMIN" ? (
+            <li className={location.pathname === "/admin" ? "active" : ""}>
+              <Link to="/admin">Quản Trị Viên</Link>
+            </li>
+          ) : null}
         </ul>
       )}
       {currentUser && (

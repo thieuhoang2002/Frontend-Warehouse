@@ -16,6 +16,8 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import CheckoutListReport from './Components/CheckoutListReport/CheckoutListReport';
 import DeliveryReport from './Components/DeliveryReport/DeliveryReport';
 import Report from './pages/report/report';
+import AdminPage from './pages/admin/AdminPage';
+
 const App = () => {
   const Layout = () => {
     return (
@@ -42,37 +44,26 @@ const App = () => {
       element: <Layout />,
       children: [
         { path: "/", element: <Home /> },
-        {
-          path: "/booking",
-          element: <Booking />,
-        },
-        {
-          path: "/product",
-          element: <Product />,
-        },
+        { path: "/booking",  element: <Booking /> },
+        { path: "/product",  element: <Product /> },
         {
           path: "/report",
           element: <Report />,
           children: [
-            { path: "", Component: Dashboard },
-            { path: "reports/checkout-list", Component: CheckoutListReport },
+            { path: "",                           Component: Dashboard },
+            { path: "reports/checkout-list",      Component: CheckoutListReport },
             { path: "reports/delivery-confirmation", Component: DeliveryReport },
           ],
         },
-        {
-          path: "/login",
-          element: <Login />,
-        },
+        { path: "/login",    element: <Login /> },
+        { path: "/admin",    element: <AdminPage /> },
       ],
     },
     {
       path: "/",
       element: <Layout2 />,
       children: [
-        {
-          path: "/warehouse",
-          element: <Warehouse />,
-        },
+        { path: "/warehouse", element: <Warehouse /> },
       ],
     },
   ]);
@@ -80,4 +71,4 @@ const App = () => {
   return <RouterProvider router={router} />;
 };
 
-export default App;
+export default App;
