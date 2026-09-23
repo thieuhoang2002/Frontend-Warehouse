@@ -37,12 +37,13 @@ const CheckoutListReport = () => {
   }, []);
 
   const fetchPendingCheckoutItems = () => {
-    // fetch("http://localhost:8080/api/jasper/checkout-records/grouped")
-    fetch(`${API_URL}/api/jasper/checkout-records/grouped`)
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    const token = user?.accessToken ? `Bearer ${user.accessToken}` : "";
+    fetch(`${API_URL}/api/jasper/checkout-records/grouped`, {
+      headers: { Authorization: token },
+    })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       })
       .then((data) => {
@@ -50,9 +51,7 @@ const CheckoutListReport = () => {
         console.log(data);
       })
       .catch((error) => {
-        setSnackbarMessage(
-          "Error fetching data: " + (error.message || "Network error")
-        );
+        setSnackbarMessage("Error fetching data: " + (error.message || "Network error"));
         setSnackbarSeverity("error");
         setOpenSnackbar(true);
       });
@@ -257,7 +256,7 @@ const CheckoutListReport = () => {
           open={openSnackbar}
           autoHideDuration={6000}
           onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: "center", horizontal: "center" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
             onClose={handleSnackbarClose}

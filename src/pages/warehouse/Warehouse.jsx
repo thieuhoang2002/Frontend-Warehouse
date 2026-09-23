@@ -10,6 +10,7 @@ import ShelfModel from "../../Components/Model3D/ShelfModel";
 import TruckModel from "../../Components/Model3D/TruckModel";
 import Compartment from "../../Components/Model3D/Compartment";
 import WarehouseView from "../../Components/WarehouseView/WarehouseView";
+import apiClient from "../../api/api-client";
 
 const Warehouse = () => {
   const [compartments, setCompartments] = useState([]);
@@ -17,48 +18,21 @@ const Warehouse = () => {
   const [selectedCompartment, setSelectedCompartment] = useState(null);
   const [selectedView, setSelectedView] = useState("default");
 
-  const API_URL = process.env.REACT_APP_API_URL;
+  const fetchCompartmentFromServer = (compartmentIdentifier) =>
+    apiClient
+      .get(`/api/compartments/${compartmentIdentifier.shelfId}/${compartmentIdentifier.nameComp}`)
+      .then((r) => r.data)
+      .catch(() => null);
 
-  const fetchCompartmentFromServer = (compartmentIdentifier) => {
-    // return fetch(
-    //   `http://localhost:8080/api/compartments/${compartmentIdentifier.shelfId}/${compartmentIdentifier.nameComp}`
-    // )
-    return fetch(
-      `${API_URL}/api/compartments/${compartmentIdentifier.shelfId}/${compartmentIdentifier.nameComp}`
-    )
-      .then((response) => {
-        if (!response.ok) {
-          return null;
-        }
-        return response.json();
-      })
-      .catch((error) => {
-        console.error("Error fetching compartment from server:", error);
-        throw error;
-      });
-  };
-
-  const createCompartment = (compartmentData) => {
-    // return fetch(
-    //  `http://localhost:8080/api/compartments/${compartmentData.shelfId}`, {
-    return fetch(`${API_URL}/api/compartments/${compartmentData.shelfId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(compartmentData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to create compartment");
-        }
-        return response.json();
-      })
+  const createCompartment = (compartmentData) =>
+    apiClient
+      .post(`/api/compartments/${compartmentData.shelfId}`, compartmentData)
+      .then((r) => r.data)
       .catch((error) => {
         console.error("Error creating compartment:", error);
         throw error;
       });
-  };
+
 
   const handleCompartmentClick = (shelf, shelfIndex, layerIndex, side) => {
     const compartmentIdentifier = {
@@ -102,19 +76,15 @@ const Warehouse = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    // fetch("http://localhost:8080/api/compartments")
-    fetch(`${API_URL}/api/compartments`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setCompartments(data);
+    apiClient.get("/api/compartments")
+      .then((r) => {
+        if (Array.isArray(r.data)) {
+          setCompartments(r.data);
         } else {
-          console.error("Invalid data format:", data);
+          console.error("Invalid data format:", r.data);
         }
       })
-      .catch((error) => {
-        console.error("Error fetching compartments:", error);
-      });
+      .catch((error) => console.error("Error fetching compartments:", error));
   }, []);
 
   const getCompartmentColor = (compartments, shelfId, nameComp) => {

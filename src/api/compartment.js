@@ -1,73 +1,53 @@
-import axios from "axios";
-import authHeader from "./auth-header";
+import apiClient from "./api-client";
 
-// const API_URL = "http://localhost:8080/api/compartments";
-const API_URL = `${process.env.REACT_APP_API_URL}/api/compartments/`;
+const API_PATH = "/api/compartments";
+
 const parseItemId = (itemId) => {
   if (itemId.startsWith("SP")) {
-    // Loại bỏ tiền tố "SP" và chuyển phần số còn lại thành kiểu số (Long trong JavaScript là Number)
     return parseInt(itemId.substring(2), 10);
-  } else {
-    throw new Error("Invalid formatted ID: " + itemId);
   }
+  throw new Error("Invalid formatted ID: " + itemId);
 };
-// Hàm thêm item vào compartment
+
 const addItemToCompartment = (compartmentId, itemId, quantity) => {
   try {
-    // Chuyển đổi itemId từ String sang Number
     const parsedItemId = parseItemId(itemId);
-
-    // Gửi yêu cầu POST với itemId đã chuyển đổi
-    return axios.post(`${API_URL}/${compartmentId}/addItem`, {
+    return apiClient.post(`${API_PATH}/${compartmentId}/addItem`, {
       itemId: parsedItemId,
-      quantity: quantity,
+      quantity,
     });
   } catch (error) {
-    // Log lỗi nếu itemId không hợp lệ
     console.error(error.message);
     return Promise.reject(new Error("Invalid item ID format."));
   }
 };
 
-// Hàm cập nhật số lượng item trong compartment
-const updateItemQuantity = (compartmentId, itemId, quantity) => {
-  return axios.put(`${API_URL}/${compartmentId}/updateQuantity`, {
-    itemId: itemId,
-    quantity: quantity,
+const updateItemQuantity = (compartmentId, itemId, quantity) =>
+  apiClient.put(`${API_PATH}/${compartmentId}/updateQuantity`, {
+    itemId,
+    quantity,
   });
-};
 
-// Hàm xóa item khỏi compartment
-const deleteItemFromCompartment = (compartmentId, itemId) => {
-  return axios.delete(`${API_URL}/${compartmentId}/removeItem/${itemId}`);
-};
+const deleteItemFromCompartment = (compartmentId, itemId) =>
+  apiClient.delete(`${API_PATH}/${compartmentId}/removeItem/${itemId}`);
 
-// Hàm checkout item từ compartment
-const checkoutItem = (compartmentId, itemId, referenceNo, delivery) => {
-  return axios.post(`${API_URL}/${compartmentId}/checkout/${itemId}`, null, {
-    params: {
-      referenceNo: referenceNo,
-      delivery: delivery,
-    },
-    headers: authHeader(), // Truyền token vào header để xác thực
-  });
-};
+const checkoutItem = (compartmentId, itemId, referenceNo, delivery) =>
+  apiClient.post(
+    `${API_PATH}/${compartmentId}/checkout/${itemId}`,
+    null,
+    { params: { referenceNo, delivery } }
+  );
 
-// Hàm lấy danh sách các item đã checkout nhưng chưa xác nhận
-const getPendingCheckoutItems = () => {
-  return axios.get(`${API_URL}/checkout/pending`);
-};
+// Note: no double-slash — API_PATH does NOT have trailing slash
+const getPendingCheckoutItems = () =>
+  apiClient.get(`${API_PATH}/checkout/pending`);
 
-// Hàm xác nhận checkout cho một record
-const confirmCheckout = (recordId) => {
-  return axios.post(`${API_URL}/checkout/confirm/${recordId}`);
-};
+const confirmCheckout = (recordId) =>
+  apiClient.post(`${API_PATH}/checkout/confirm/${recordId}`);
 
-// Hàm hủy checkout và trả item lại vào compartment
-const cancelCheckout = (recordId) => {
-  return axios.post(`${API_URL}/checkout/cancel/${recordId}`);
-};
-// Tạo đối tượng CompartmentService để quản lý các hàm API
+const cancelCheckout = (recordId) =>
+  apiClient.post(`${API_PATH}/checkout/cancel/${recordId}`);
+
 const CompartmentService = {
   addItemToCompartment,
   updateItemQuantity,
