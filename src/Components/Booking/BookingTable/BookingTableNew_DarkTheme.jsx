@@ -38,10 +38,15 @@ const BookingTableNew = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const downloadClicked = async (rowIndex) => {
-    const excelFile = bookings[rowIndex].excelFile.split("\\").pop();
+  const getToken = () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
-    const token = user?.accessToken ? `Bearer ${user.accessToken}` : "";
+    return user?.accessToken ? `Bearer ${user.accessToken}` : "";
+  };
+
+  const downloadClicked = async (rowIndex) => {
+    // Split on both \ and / to handle Windows and Unix paths from backend
+    const excelFile = bookings[rowIndex].excelFile.split(/[\\/]/).pop();
+    const token = getToken();
 
     Swal.fire({
       title: "Đang tải xuống...",
@@ -92,32 +97,22 @@ const BookingTableNew = () => {
           title: "Đang huỷ...",
           text: "Vui lòng chờ trong giây lát.",
           allowOutsideClick: false,
-          onBeforeOpen: () => {
-            Swal.showLoading();
-          },
+          didOpen: () => { Swal.showLoading(); },
         });
 
         fetch(`${API_URL}/api/booking/delete/${bookingId}`, {
-          // fetch(`http://localhost:8080/api/booking/delete/${bookingId}`, {
           method: "DELETE",
+          headers: { Authorization: getToken() },
         })
           .then((response) => {
-            if (!response.ok) {
-              throw new Error("Huỷ không thành công");
-            }
-            return new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(response.json());
-              }, 1000);
-            });
+            if (!response.ok) throw new Error("Huỷ không thành công");
+            return new Promise((resolve) => setTimeout(() => resolve(response.json()), 1000));
           })
-          .then((data) => {
+          .then(() => {
             Swal.fire("Đã huỷ!", "Huỷ thành công", "success");
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+            setTimeout(() => window.location.reload(), 2000);
           })
-          .catch((error) => {
+          .catch(() => {
             Swal.fire("Thất bại!", "Huỷ không thành công", "error");
           });
       }
@@ -129,50 +124,37 @@ const BookingTableNew = () => {
     Swal.fire({
       title: "Đang in...",
       allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
+      didOpen: () => { Swal.showLoading(); },
     });
 
     try {
       const response = await fetch(
-        // "http://localhost:8080/api/jasper/generate-pdf-booking",
-        // eslint-disable-next-line no-template-curly-in-string
         `${API_URL}/api/jasper/generate-pdf-booking`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: getToken(),
           },
           body: JSON.stringify(bookings[rowIndex]),
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to generate PDF");
-      }
+      if (!response.ok) throw new Error("Failed to generate PDF");
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-
-      // Mở PDF trong một tab mới
       const newWindow = window.open(url, "_blank");
       if (newWindow) {
-        newWindow.addEventListener("load", () => {
-          newWindow.print(); // Tự động gọi hộp thoại in
-        });
+        newWindow.addEventListener("load", () => newWindow.print());
       }
-
-      Swal.close(); // Đóng thông báo sau khi mở PDF
+      Swal.close();
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: "Không thể tạo PDF. Vui lòng thử lại.",
-      });
+      Swal.fire({ icon: "error", title: "Lỗi", text: "Không thể tạo PDF. Vui lòng thử lại." });
       console.error("Error generating PDF:", error);
     }
   };
+
 
   const handleClosePopup = () => {
     setIsEditing(false);
