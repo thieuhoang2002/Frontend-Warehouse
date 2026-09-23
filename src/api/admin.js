@@ -45,3 +45,7 @@ export const deleteShelf = (id) =>
 export const getSystemInfo = () =>
   apiClient.get(`${BASE}/system-info`).then((r) => r.data).catch(() => ({}));
 
+export const resetDemoData = () =>
+  apiClient.post(`${BASE}/reset-demo`);
+
+
