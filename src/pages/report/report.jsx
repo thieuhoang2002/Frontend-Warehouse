@@ -1,15 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+
+
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import DescriptionIcon from '@mui/icons-material/Description';
-import BarChartIcon from '@mui/icons-material/BarChart';
+
 import { AppProvider } from '@toolpad/core/react-router-dom'; // React Router version
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { Outlet, Link } from 'react-router-dom';  // Sử dụng Link từ react-router-dom
+import { Outlet } from 'react-router-dom';  // Sử dụng Link từ react-router-dom
 
 
 // Cấu hình các mục navigation với đường dẫn tương ứng
@@ -56,7 +56,7 @@ const demoTheme = createTheme({
 
 // Component chính của Statistic
 function Report(props) {
-  const { window } = props;
+
 
   // Sử dụng router demo từ toolpad
   // const router = useDemoRouter('/dashboard');

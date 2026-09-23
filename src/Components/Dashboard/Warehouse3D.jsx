@@ -1,8 +1,8 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Text, OrbitControls } from '@react-three/drei';
-import { GridHelper } from 'three';
-import { useThree } from "@react-three/fiber";
+
+
 import ShelfModel from '../Model3D/ShelfModel';
 // function Shelf({ position, color, label }) {
 //     return (
@@ -15,11 +15,7 @@ import ShelfModel from '../Model3D/ShelfModel';
 //         </mesh>
 //     );
 // }
-function Grid() {
-    return (
-        <primitive object={new GridHelper(30, 30, 'white', 'gray')} />
-    );
-}
+
 // const Compartment = ({ position, color, nameComp }) => {
 //   return (
 //     <mesh position={position}>

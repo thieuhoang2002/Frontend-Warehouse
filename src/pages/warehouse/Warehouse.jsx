@@ -101,6 +101,7 @@ const Warehouse = () => {
       });
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     //fetch("http://localhost:8080/api/compartments")
     fetch(`${API_URL}/api/compartments`)

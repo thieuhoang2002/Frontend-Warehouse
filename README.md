@@ -1,70 +1,147 @@
-# Getting Started with Create React App
+# 🖥️ Frontend — Warehouse Management System (WMS)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react)
+![MUI](https://img.shields.io/badge/MUI-v6-007FFF?logo=mui)
+![Three.js](https://img.shields.io/badge/Three.js-0.166-black?logo=threedotjs)
+![React Router](https://img.shields.io/badge/React%20Router-v6-CA4245?logo=reactrouter)
+![Axios](https://img.shields.io/badge/Axios-1.7.5-5A29E4)
 
-## Available Scripts
+> Giao diện người dùng cho hệ thống Quản lý Kho hàng (WMS). Kho hàng 3D trực quan, quản lý hàng hóa, booking, báo cáo PDF và thông báo real-time.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 Bắt Đầu Nhanh
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Yêu cầu
+- Node.js 16+
+- Backend WMS đang chạy tại `http://localhost:8080`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Cài đặt & Chạy
 
-### `npm test`
+```bash
+# 1. Clone
+git clone https://github.com/thieuhoang2002/Frontend-Warehouse.git
+cd Frontend-Warehouse
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# 2. Cài dependencies
+npm install --legacy-peer-deps
 
-### `npm run build`
+# 3. Tạo file cấu hình
+cp .env.example .env
+# Chỉnh sửa .env nếu backend chạy ở port khác
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# 4. Chạy dev server
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Mở trình duyệt tại: **`http://localhost:3000`**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+> ⚠️ **Bắt buộc:** Backend phải đang chạy trước khi mở frontend. Nếu không, trang sẽ không load được dữ liệu.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🔑 Biến Môi Trường (`.env`)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| Biến | Mô tả | Mặc định |
+|------|-------|---------|
+| `REACT_APP_API_URL` | URL của backend API | `http://localhost:8080` |
+| `GENERATE_SOURCEMAP` | Tắt source map warning | `false` |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📁 Cấu Trúc Thư Mục
 
-## Learn More
+```
+src/
+├── api/                    # Axios API service layer
+│   ├── auth-header.js      # Tự động thêm JWT vào headers
+│   ├── auth-login.js       # Đăng nhập / Đăng ký / Đếm users
+│   ├── booking.js          # CRUD Booking + upload CSV
+│   ├── compartment.js      # Quản lý ngăn kệ + checkout
+│   ├── notification.js     # Lấy & đánh dấu thông báo
+│   ├── product.js          # CRUD hàng hóa
+│   └── shelf.js            # CRUD kệ hàng
+│
+├── Components/             # Reusable components
+│   ├── Booking/            # Form tạo booking mới
+│   ├── CheckoutListReport/ # Bảng danh sách chờ xác nhận xuất kho
+│   ├── Dashboard/          # Dashboard thống kê + Kho 3D (Three.js)
+│   ├── DeliveryReport/     # Báo cáo giao hàng
+│   ├── Footer/             # Footer layout
+│   ├── Home/               # Trang chủ (Intro, Feature, Contact, Map)
+│   ├── ItemInfo/           # Popup thông tin hàng hóa
+│   ├── Loader/             # Loading spinner
+│   ├── Model3D/            # 3D model components (Three.js/R3F)
+│   ├── Navbar/             # Navigation bar
+│   ├── Packaging/          # Đóng gói / phân kệ
+│   ├── PopupItems/         # Popup danh sách items trong ngăn
+│   ├── PrivateRoute/       # Route guard yêu cầu đăng nhập
+│   ├── Product/            # Bảng hàng hóa + Edit form
+│   └── WarehouseView/      # Giao diện xem kho hàng
+│
+└── pages/                  # Route-level pages
+    ├── booking/            # Trang quản lý booking
+    ├── home/               # Trang chủ (landing)
+    ├── login/              # Trang đăng nhập
+    ├── product/            # Trang danh sách hàng hóa
+    ├── report/             # Trang báo cáo (Dashboard + Reports)
+    └── warehouse/          # Trang xem kho 3D
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🗺️ Routing
 
-### Code Splitting
+| URL | Trang | Yêu cầu đăng nhập |
+|-----|-------|-------------------|
+| `/` | Trang chủ (Landing page) | ❌ |
+| `/login` | Đăng nhập | ❌ |
+| `/warehouse` | Xem kho 3D + quản lý ngăn kệ | ✅ |
+| `/booking` | Quản lý Booking + upload CSV | ✅ |
+| `/product` | Danh sách hàng hóa | ✅ |
+| `/report` | Dashboard thống kê | ✅ |
+| `/report/reports/checkout-list` | Danh sách chờ xác nhận xuất kho | ✅ |
+| `/report/reports/delivery-confirmation` | Phiếu giao hàng | ✅ |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## 🔐 Authentication Flow
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+1. User nhập username + password → POST /api/auth/signin
+2. Backend trả về { accessToken, id, username, profileName, email }
+3. Frontend lưu vào sessionStorage key "user"
+4. Mọi request sau đó đều kèm header: Authorization: Bearer <token>
+5. Logout → xóa sessionStorage["user"]
+```
 
-### Making a Progressive Web App
+> **Lưu ý:** Dùng `sessionStorage` (không phải `localStorage`) — token mất khi đóng tab.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 🏗️ Build Production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+npm run build
+```
 
-### Deployment
+Output tại thư mục `build/`. Deploy lên Vercel, Netlify, hoặc bất kỳ static host nào.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Deploy lên Vercel
 
-### `npm run build` fails to minify
+```bash
+npm install -g vercel
+vercel --prod
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Cấu hình environment variable `REACT_APP_API_URL` trên Vercel dashboard trỏ về backend Render.
+
+---
+
+## 📚 Tài Liệu Liên Quan
+
+| File | Nội dung |
+|------|----------|
+| [TECHSTACK.md](TECHSTACK.md) | Danh sách thư viện và lý do chọn |
+| [../Backend-Warehouse/README.md](../Backend-Warehouse/README.md) | Backend Spring Boot |
+| [../Backend-Warehouse/USER_GUIDE.md](../Backend-Warehouse/USER_GUIDE.md) | Hướng dẫn sử dụng cho người dùng |

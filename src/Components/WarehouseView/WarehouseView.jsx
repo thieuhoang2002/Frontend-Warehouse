@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './warehouseview.css';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';

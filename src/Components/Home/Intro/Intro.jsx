@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { Link } from "react-scroll";
+
 import { motion } from "framer-motion";
 const transition = { duration: 1, ease: "easeInOut" };
 

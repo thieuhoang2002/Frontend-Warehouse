@@ -1,6 +1,6 @@
 import React from 'react'
 import './footer.css'; 
-import { Height } from '@mui/icons-material';
+
 
 const Footer = () => {
   return (

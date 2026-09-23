@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Notification from "./Notification";
-import { IconButton } from "@mui/material";
+
 import AuthService from "../../api/auth-login";
 import "./navbar.css";
 import NotificationService from "../../api/notification";

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Card, CardContent, Grid, useTheme } from '@mui/material';
 import { FormControlLabel, Switch } from '@mui/material';
-import { People, Inventory, PersonAdd, Warehouse } from '@mui/icons-material';
+import { People, Inventory, PersonAdd } from '@mui/icons-material';
 import './dashboard.css'
 import AuthService from './../../api/auth-login';
 import ProductService from './../../api/product';

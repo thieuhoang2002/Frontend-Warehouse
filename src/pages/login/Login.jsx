@@ -1,18 +1,10 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState } from 'react';
 import Form from 'react-validation/build/form';
 import CheckButton from 'react-validation/build/button';
 import './login.css';
 import AuthService from '../../api/auth-login';
 import { useNavigate } from 'react-router-dom';
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className='error' role="alert">
-        Không được để trống!
-      </div>
-    );
-  }
-};
+
 const Login = () => {
   const form = useRef();
   const checkBtn = useRef();
@@ -59,7 +51,9 @@ const Login = () => {
           window.location.reload();
         },
         (error) => {
-          const resMessage = (error.response.data.message)
+          const resMessage =
+            error.response?.data?.message ||
+            'Không thể kết nối đến máy chủ. Vui lòng thử lại!';
           setLoading(false);
           setMessage(resMessage);
         }

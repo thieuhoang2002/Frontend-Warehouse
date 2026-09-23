@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import Dropzone from "react-dropzone";
 import { FaUpload } from "react-icons/fa";
 import BookingService from "../../../api/booking";
@@ -35,7 +35,7 @@ const BtnAddNewBooking = ({ onClose }) => {
     }
 
     try {
-      const message = await BookingService.upload(file);
+      await BookingService.upload(file);
       AlertSuccess();
     } catch (error) {
       console.error("Có lỗi xảy ra khi lưu tập tin:", error);

@@ -5,7 +5,7 @@ import useWindowSize from "./useWindowSize";
 const SmoothScroll = ({ children }) => {
   const windowSize = useWindowSize();
   const scrollingContainerRef = useRef();
-  const contactRef = useRef(null);
+
 
   const data = {
     ease: 0.1,
@@ -18,6 +18,7 @@ const SmoothScroll = ({ children }) => {
   //     setBodyHeight();
   //   }, ["360vh"]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (window.location.href === "http://localhost:3000/") {
       setBodyHeight();
@@ -45,6 +46,7 @@ const SmoothScroll = ({ children }) => {
     requestAnimationFrame(() => smoothScrollingHandler());
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (window.location.href === "http://localhost:3000/") {
       requestAnimationFrame(() => smoothScrollingHandler());

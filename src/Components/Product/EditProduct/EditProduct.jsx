@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./editproduct.css";
 import ProductService from "../../../api/product";
-import IconButton from "@mui/material/IconButton";
+
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,10 +9,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const EditProduct = ({ product, onClose }) => {
   const [formData, setFormData] = useState(product);
-  const [saveStatus, setSaveStatus] = useState(null);
-
   const [showReferenceNo, setShowReferenceNo] = useState(false);
-  const [deliveryValue, setDeliveryValue] = useState("");
 
   const toggleDeliveryVisibility = () => {
     setShowReferenceNo(!showReferenceNo);
@@ -39,13 +36,11 @@ const EditProduct = ({ product, onClose }) => {
   const handleSaveClick = async () => {
     try {
       console.log(formData);
-      const message = await ProductService.updateProduct(formData);
+      await ProductService.updateProduct(formData);
       //alert(message);
-      setSaveStatus("success");
       //window.location.reload();
       AlertSuccess();
     } catch (error) {
-      setSaveStatus("error");
       console.error("Có lỗi xảy ra khi upload dữ liệu:", error);
     }
   };

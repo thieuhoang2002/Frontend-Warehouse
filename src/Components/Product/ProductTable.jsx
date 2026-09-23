@@ -10,7 +10,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import TableRowComponent from "./TableRowComponent";
-import TablePaginationActions from "./TablePaginationActions";
+
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import ProductService from "../../api/product"; // Import your API service
 import "./ProductTable.css";
@@ -36,7 +36,7 @@ export default function ProductTable({
   productsByName,
 }) {
   const [products, setProducts] = React.useState([]);
-  const [loading, setLoading] = React.useState(false); // State cho trạng thái loading
+  const [loading] = React.useState(false); // State cho trạng thái loading
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [allProduct, setAllProduct] = useState([]);
@@ -50,6 +50,7 @@ export default function ProductTable({
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     allProducts();
   }, []);
