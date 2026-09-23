@@ -54,6 +54,8 @@ Mở trình duyệt tại: **`http://localhost:3000`**
 ```
 src/
 ├── api/                    # Axios API service layer
+│   ├── admin.js            # Quản lý tài khoản & thống kê hệ thống (Admin)
+│   ├── api-client.js       # Axios client dùng chung với JWT interceptor
 │   ├── auth-header.js      # Tự động thêm JWT vào headers
 │   ├── auth-login.js       # Đăng nhập / Đăng ký / Đếm users
 │   ├── booking.js          # CRUD Booking + upload CSV
@@ -63,7 +65,7 @@ src/
 │   └── shelf.js            # CRUD kệ hàng
 │
 ├── Components/             # Reusable components
-│   ├── Booking/            # Form tạo booking mới
+│   ├── Booking/            # Form tạo booking mới & bảng booking
 │   ├── CheckoutListReport/ # Bảng danh sách chờ xác nhận xuất kho
 │   ├── Dashboard/          # Dashboard thống kê + Kho 3D (Three.js)
 │   ├── DeliveryReport/     # Báo cáo giao hàng
@@ -72,7 +74,7 @@ src/
 │   ├── ItemInfo/           # Popup thông tin hàng hóa
 │   ├── Loader/             # Loading spinner
 │   ├── Model3D/            # 3D model components (Three.js/R3F)
-│   ├── Navbar/             # Navigation bar
+│   ├── Navbar/             # Navigation bar (responsive, dark mode)
 │   ├── Packaging/          # Đóng gói / phân kệ
 │   ├── PopupItems/         # Popup danh sách items trong ngăn
 │   ├── PrivateRoute/       # Route guard yêu cầu đăng nhập
@@ -80,6 +82,7 @@ src/
 │   └── WarehouseView/      # Giao diện xem kho hàng
 │
 └── pages/                  # Route-level pages
+    ├── admin/              # Trang Quản Trị Viên (Quản lý User & Thống kê hệ thống)
     ├── booking/            # Trang quản lý booking
     ├── home/               # Trang chủ (landing)
     ├── login/              # Trang đăng nhập
@@ -92,16 +95,17 @@ src/
 
 ## 🗺️ Routing
 
-| URL | Trang | Yêu cầu đăng nhập |
-|-----|-------|-------------------|
-| `/` | Trang chủ (Landing page) | ❌ |
-| `/login` | Đăng nhập | ❌ |
-| `/warehouse` | Xem kho 3D + quản lý ngăn kệ | ✅ |
-| `/booking` | Quản lý Booking + upload CSV | ✅ |
-| `/product` | Danh sách hàng hóa | ✅ |
-| `/report` | Dashboard thống kê | ✅ |
-| `/report/reports/checkout-list` | Danh sách chờ xác nhận xuất kho | ✅ |
-| `/report/reports/delivery-confirmation` | Phiếu giao hàng | ✅ |
+| URL | Trang | Quyền truy cập |
+|-----|-------|----------------|
+| `/` | Trang chủ (Landing page) | Mọi người |
+| `/login` | Đăng nhập | Mọi người |
+| `/warehouse` | Xem kho 3D + quản lý ngăn kệ | Đã đăng nhập |
+| `/booking` | Quản lý Booking + upload CSV | Đã đăng nhập |
+| `/product` | Danh sách hàng hóa | Đã đăng nhập |
+| `/report` | Dashboard thống kê | Đã đăng nhập |
+| `/report/reports/checkout-list` | Danh sách chờ xác nhận xuất kho | Đã đăng nhập |
+| `/report/reports/delivery-confirmation` | Phiếu giao hàng | Đã đăng nhập |
+| `/admin` | Quản Trị Viên (Nhân viên, Thống kê HT) | Chỉ **ROLE_ADMIN** |
 
 ---
 
@@ -109,11 +113,13 @@ src/
 
 ```
 1. User nhập username + password → POST /api/auth/signin
-2. Backend trả về { accessToken, id, username, profileName, email }
+2. Backend trả về { accessToken, id, username, profileName, email, role }
 3. Frontend lưu vào sessionStorage key "user"
-4. Mọi request sau đó đều kèm header: Authorization: Bearer <token>
-5. Logout → xóa sessionStorage["user"]
+4. Shared Axios Interceptor (api-client.js) tự động gán Authorization: Bearer <token>
+5. Navbar tự động hiển thị tab "Quản Trị Viên" nếu role === "ROLE_ADMIN"
+6. Logout → xóa sessionStorage["user"] và chuyển về trang chủ
 ```
+
 
 > **Lưu ý:** Dùng `sessionStorage` (không phải `localStorage`) — token mất khi đóng tab.
 
