@@ -6,9 +6,11 @@ import {
 import {
   People as PeopleIcon,
   BarChart as BarChartIcon,
+  Warehouse as WarehouseIcon,
   AdminPanelSettings as AdminIcon,
 } from "@mui/icons-material";
 import UserManagement from "./UserManagement";
+import WarehouseManagement from "./WarehouseManagement";
 import SystemInfo from "./SystemInfo";
 import AuthService from "../../api/auth-login";
 
@@ -44,8 +46,9 @@ const adminDarkTheme = createTheme({
 });
 
 const TABS = [
-  { id: "users",   label: "Quản lý nhân viên",   icon: PeopleIcon },
-  { id: "system",  label: "Thông tin hệ thống",   icon: BarChartIcon },
+  { id: "users",      label: "Quản lý nhân viên",   icon: PeopleIcon },
+  { id: "warehouses", label: "Quản lý kho & kệ",    icon: WarehouseIcon },
+  { id: "system",     label: "Thông tin hệ thống",   icon: BarChartIcon },
 ];
 
 export default function AdminPage() {
@@ -138,11 +141,13 @@ export default function AdminPage() {
 
         {/* Main content */}
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          {activeTab === "users" && <UserManagement currentUsername={currentUser?.username} />}
-          {activeTab === "system" && <SystemInfo />}
+          {activeTab === "users"      && <UserManagement currentUsername={currentUser?.username} />}
+          {activeTab === "warehouses" && <WarehouseManagement />}
+          {activeTab === "system"     && <SystemInfo />}
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
+
 
