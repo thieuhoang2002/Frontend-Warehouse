@@ -99,12 +99,13 @@ export default function ProductTable({
                 <TableRowComponent
                   key={product.itemId}
                   product={product}
-                  index={index}
+                  index={page * rowsPerPage + index}
                   isPopup={isPopup}
                   onSelectProduct={onSelectProduct}
                 />
               ))}
           </TableBody>
+
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}

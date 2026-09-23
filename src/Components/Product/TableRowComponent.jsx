@@ -15,6 +15,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa"; // Import the download icon from FontAwesome
 import EditProduct from "./EditProduct/EditProduct";
+import apiClient from "../../api/api-client";
 
 export default function TableRowComponent({
   product,
@@ -27,6 +28,7 @@ export default function TableRowComponent({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   let count = 1;
+
   const handleButtonClick = () => {
     if (product.quantity === 1) {
       // Nếu quantity là 1, tự động thêm vào compartment
@@ -36,20 +38,20 @@ export default function TableRowComponent({
       onSelectProduct(product);
     }
   };
+
   useEffect(() => {
-    if (open) {
-      fetch(`http://localhost:8080/api/product/${product.itemId}/compartments`)
+    if (open && product?.itemId) {
+      setLoading(true);
+      setError(null);
+      apiClient
+        .get(`/api/product/${product.itemId}/compartments`)
         .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch compartments");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setCompartments(data);
+          const data = response.data;
+          setCompartments(Array.isArray(data) ? data : []);
           setLoading(false);
         })
-        .catch((error) => {
+        .catch((err) => {
+          console.error("Error fetching compartments:", err);
           setError("Hàng chưa lên kệ");
           setLoading(false);
         });
